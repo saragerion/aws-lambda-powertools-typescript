@@ -10,7 +10,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        version: [ 12, 14 ]
+        version: [ 14 ]
         package: [ logger, metrics, tracer ]
     concurrency:
       group: e2e-tests-${{ matrix.version }}-${{ matrix.package }}
