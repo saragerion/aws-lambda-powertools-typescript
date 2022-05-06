@@ -2,16 +2,9 @@ name: run-e2e-tests
 on:
   workflow_dispatch: {}
 jobs:
-  checkout:
-    runs-on: ubuntu-latest
-    name: Setup AWS credentials
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v3
   end-to-end-and-packaging:
     runs-on: ubuntu-latest
     name: E2E test & packaging - ${{ matrix.version }} - ${{ matrix.utility }}
-    needs: checkout
     permissions:
       id-token: write # needed to interact with GitHub's OIDC Token endpoint.
       contents: read
@@ -22,6 +15,7 @@ jobs:
     concurrency:
       group: e2e-tests-${{ matrix.version }}-${{ matrix.utility }}
     steps:
+      - uses: actions/checkout@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
