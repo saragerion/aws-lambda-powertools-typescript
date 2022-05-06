@@ -4,16 +4,16 @@ on:
 jobs:
   end-to-end-and-packaging:
     runs-on: ubuntu-latest
-    name: E2E test & packaging - nodejs${{ matrix.version }}x - ${{ matrix.utility }}
+    name: E2E test & packaging - nodejs${{ matrix.version }}x - ${{ matrix.package }}
     permissions:
       id-token: write # needed to interact with GitHub's OIDC Token endpoint.
       contents: read
     strategy:
       matrix:
         version: [ 12, 14 ]
-        utility: [ logger, metrics, tracing ]
+        package: [ logger, metrics, tracer ]
     concurrency:
-      group: e2e-tests-${{ matrix.version }}-${{ matrix.utility }}
+      group: e2e-tests-${{ matrix.version }}-${{ matrix.package }}
     steps:
       - uses: actions/checkout@v3
       - name: Configure AWS credentials
@@ -27,12 +27,10 @@ jobs:
           node-version: ${{ matrix.version }}
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-      - name: Run tests tests
-        working-directory: ~
+      - name: Run tests
         run: |
           npm ci --foreground-scripts
-          cd ./packages/${{ matrix.utility }}
-          NODE_VERSION=${{ matrix.version }} npm run test:e2e
+          NODE_VERSION=${{ matrix.version }} npm run test:e2e:${{ matrix.package }}
       - name: Install example packages
         # Since we are not managing the cdk examples with npm workspaces we install
         # the dependencies in a separate step
