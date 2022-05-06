@@ -28,7 +28,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
       - name: Run tests tests
-        working-directory: ./packages/${{ matrix.utility }}
+        working-directory: ~
         run: |
           npm ci --foreground-scripts
           cd ./packages/${{ matrix.utility }}
