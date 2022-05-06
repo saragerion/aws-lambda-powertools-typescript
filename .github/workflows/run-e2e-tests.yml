@@ -2,22 +2,9 @@ name: run-e2e-tests
 on:
   workflow_dispatch: {}
 jobs:
-  aws-credentials:
-    runs-on: ubuntu-latest
-    name: Setup AWS credentials
-    permissions:
-      id-token: write # needed to interact with GitHub's OIDC Token endpoint.
-      contents: read
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1.6.1
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN_TO_ASSUME }}
-          aws-region: eu-central-1
   end-to-end-and-packaging:
     runs-on: ubuntu-latest
     name: E2E test & packaging - ${{ matrix.version }} - ${{ matrix.utility }}
-    needs: aws-credentials
     strategy:
       matrix:
         version: [ 14 ]
@@ -26,6 +13,11 @@ jobs:
     concurrency:
       group: e2e-tests-${{ matrix.version }}-${{ matrix.utility }}
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_TO_ASSUME }}
+          aws-region: eu-west-1
       - name: "Checkout"
         uses: actions/checkout@v3
       - name: "Setup Node.js ${{ matrix.version }}"
