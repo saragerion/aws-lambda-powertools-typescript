@@ -10,7 +10,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        version: [ 14 ]
+        version: [ 12, 14 ]
         utility: [ logger, metrics, tracing ]
     concurrency:
       group: e2e-tests-${{ matrix.version }}-${{ matrix.utility }}
@@ -39,8 +39,7 @@ jobs:
       - name: Run integration tests
         run: |
           cd packages/${{ matrix.utility }}
-          npm run lerna-package
-          cd examples/cdk
+          NODE_VERSION=${{ matrix.version }} npm run test:e2e
       - name: Run packaging tests
         run: |
           cd ~
