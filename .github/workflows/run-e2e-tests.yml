@@ -25,10 +25,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.version }}
-          cache: 'npm'
-          cache-dependency-path: |
-            package-lock.json
-            packages/${{ matrix.utility }}/package-lock.json
       - name: Install monorepo packages
         # This installs all the dependencies of ./packages/*
         # See https://github.com/npm/cli/issues/4475 to see why --foreground-scripts
