@@ -3,9 +3,8 @@ on:
   workflow_dispatch: {}
 jobs:
   end-to-end-and-packaging:
-    name: E2E test & packaging - ${{ matrix.version }} - ${{ matrix.utility }}
-    needs: build
     runs-on: ubuntu-latest
+    name: E2E test & packaging - ${{ matrix.version }} - ${{ matrix.utility }}
     strategy:
       matrix:
         version: [ 14 ]
