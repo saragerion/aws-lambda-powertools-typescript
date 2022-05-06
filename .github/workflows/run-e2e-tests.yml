@@ -10,10 +10,10 @@ jobs:
       contents: read
     strategy:
       matrix:
-        node_version: [ 14 ]
-        package: [ logger, metrics, tracer ]
+        version: [ 14 ]
+        package: [ logger, metrics, tracing ]
     concurrency:
-      group: e2e-tests-${{ matrix.node_version }}-${{ matrix.package }}
+      group: e2e-tests-${{ matrix.version }}-${{ matrix.package }}
     steps:
       - uses: actions/checkout@v3
       - name: Configure AWS credentials
@@ -21,17 +21,17 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN_TO_ASSUME }}
           aws-region: eu-central-1
-      - name: "Setup Node.js ${{ matrix.node_version }}"
+      - name: "Setup Node.js ${{ matrix.version }}"
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: ${{ matrix.version }}
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
       - name: Run tests
         run: |
           npm ci --foreground-scripts
           npm --prefix ./packages/${{ matrix.package }} ci
-          NODE_VERSION=${{ matrix.node_version }} npm run test:e2e:${{ matrix.package }}
+          NODE_VERSION=${{ matrix.version }} npm run test:e2e:${{ matrix.package }}
       - name: Install example packages
         # Since we are not managing the cdk examples with npm workspaces we install
         # the dependencies in a separate step
