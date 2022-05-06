@@ -4,7 +4,7 @@ on:
 jobs:
   end-to-end-and-packaging:
     runs-on: ubuntu-latest
-    name: E2E test & packaging - ${{ matrix.version }} - ${{ matrix.utility }}
+    name: E2E test & packaging - nodejs${{ matrix.version }}x - ${{ matrix.utility }}
     permissions:
       id-token: write # needed to interact with GitHub's OIDC Token endpoint.
       contents: read
@@ -27,22 +27,20 @@ jobs:
           node-version: ${{ matrix.version }}
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-      - name: Install monorepo packages
-        # This installs all the dependencies of ./packages/*
-        # See https://github.com/npm/cli/issues/4475 to see why --foreground-scripts
-        run: npm ci --foreground-scripts
+      - name: Run tests tests
+        working-directory: ./packages/${{ matrix.utility }}
+        run: |
+          npm ci --foreground-scripts
+          cd ./packages/${{ matrix.utility }}
+          NODE_VERSION=${{ matrix.version }} npm run test:e2e
       - name: Install example packages
         # Since we are not managing the cdk examples with npm workspaces we install
         # the dependencies in a separate step
         working-directory: ./examples/cdk
         run: npm ci
-      - name: Run integration tests
-        run: |
-          cd packages/${{ matrix.utility }}
-          NODE_VERSION=${{ matrix.version }} npm run test:e2e
       - name: Run packaging tests
+        working-directory: ~
         run: |
-          cd ~
           npm run lerna-package
           cd examples/cdk
           npm install ../../packages/**/dist/aws-lambda-powertools-*
