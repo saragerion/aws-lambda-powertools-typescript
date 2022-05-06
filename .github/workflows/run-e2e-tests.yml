@@ -5,9 +5,6 @@ jobs:
   checkout:
     runs-on: ubuntu-latest
     name: Setup AWS credentials
-    permissions:
-      id-token: write # needed to interact with GitHub's OIDC Token endpoint.
-      contents: read
     steps:
       - name: "Checkout"
         uses: actions/checkout@v3
@@ -15,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     name: E2E test & packaging - ${{ matrix.version }} - ${{ matrix.utility }}
     needs: checkout
+    permissions:
+      id-token: write # needed to interact with GitHub's OIDC Token endpoint.
+      contents: read
     strategy:
       matrix:
         version: [ 14 ]
