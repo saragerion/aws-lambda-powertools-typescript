@@ -4,7 +4,7 @@ on:
 jobs:
   end-to-end-and-packaging:
     runs-on: ubuntu-latest
-    name: E2E test & packaging - nodejs${{ matrix.version }}x - ${{ matrix.package }}
+    name: E2E tests - nodejs${{ matrix.version }}x - ${{ matrix.package }}
     permissions:
       id-token: write # needed to interact with GitHub's OIDC Token endpoint.
       contents: read

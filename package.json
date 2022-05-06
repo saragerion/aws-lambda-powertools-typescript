@@ -23,7 +23,7 @@
     "test:unit:tracer": "npm --prefix ./packages/tracing run test:unit",
     "test:e2e:logger": "npm --prefix ./packages/logger run test:e2e",
     "test:e2e:metrics": "npm --prefix ./packages/metrics run test:e2e",
-    "test:e2e:tracer": "npm --prefix ./packages/tracing run test:e2e",
+    "test:e2e:tracing": "npm --prefix ./packages/tracing run test:e2e",
     "lerna-package": "lerna exec -- npm run package",
     "lerna-build": "lerna exec -- tsc",
     "lerna-lint": "lerna exec -- eslint \"./{src,tests}/**/*.ts ./src/*.ts\"",
