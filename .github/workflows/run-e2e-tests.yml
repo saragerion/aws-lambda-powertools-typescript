@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         version: [ 14 ]
-        package: [ logger, metrics, tracing ]
+        package: [ logger, metrics ]
     concurrency:
       group: e2e-tests-${{ matrix.version }}-${{ matrix.package }}
     steps:
