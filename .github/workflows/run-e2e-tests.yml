@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         version: [ 14 ]
-        package: [ logger, metrics ]
+        package: [ logger, metrics, tracing ]
     concurrency:
       group: e2e-tests-${{ matrix.version }}-${{ matrix.package }}
     steps:
@@ -30,19 +30,18 @@ jobs:
       - name: Install monorepo packages
         # This installs all the dependencies of ./packages/*
         # See https://github.com/npm/cli/issues/4475 to see why --foreground-scripts
-        run: npm ci --foreground-scripts
+        run: | 
+          npm ci --foreground-scripts
+          npm run lerna-bootstrap
       - name: Install example packages
         # Since we are not managing the cdk examples with npm workspaces we install
         # the dependencies in a separate step
         working-directory: ./examples/cdk
         run: npm ci
       - name: Run E2E tests
-        run: |
-          npm --prefix ./packages/${{ matrix.package }} ci
-          NODE_VERSION=${{ matrix.version }} npm run test:e2e:${{ matrix.package }}
+        run: NODE_VERSION=${{ matrix.version }} npm run test:e2e:${{ matrix.package }}
       - name: Run packaging tests
         run: |
-          npm run lerna-bootstrap
           npm run lerna-package
           cd examples/cdk
           npm install ../../packages/**/dist/aws-lambda-powertools-*
