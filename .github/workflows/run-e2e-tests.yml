@@ -37,10 +37,13 @@ jobs:
         working-directory: ./examples/cdk
         run: npm ci
       - name: Run E2E tests
-        run: NODE_VERSION=${{ matrix.version }} npm run test:e2e:${{ matrix.package }}
+        run: |
+          npm --prefix ./packages/${{ matrix.package }} ci
+          NODE_VERSION=${{ matrix.version }} npm run test:e2e:${{ matrix.package }}
       - name: Run packaging tests
         run: |
           npm run lerna-package
+          npm --prefix ./packages/${{ matrix.package }} ci
           cd examples/cdk
           npm install ../../packages/**/dist/aws-lambda-powertools-*
           npm run test
