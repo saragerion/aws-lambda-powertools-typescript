@@ -15,6 +15,7 @@
     "test": "npm run lerna-test",
     "commit": "commit",
     "package": "npm run package",
+    "lerna-bootstrap": "lerna bootstrap",
     "lerna-test": "lerna exec -- npm run test",
     "lerna-test:unit": "lerna exec -- npm run test:unit",
     "lerna-test:e2e": "lerna exec -- npm run test:e2e",

@@ -42,8 +42,8 @@ jobs:
           NODE_VERSION=${{ matrix.version }} npm run test:e2e:${{ matrix.package }}
       - name: Run packaging tests
         run: |
+          npm run lerna-bootstrap
           npm run lerna-package
-          npm --prefix ./packages/${{ matrix.package }} ci
           cd examples/cdk
           npm install ../../packages/**/dist/aws-lambda-powertools-*
           npm run test
